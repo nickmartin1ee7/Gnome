@@ -28,6 +28,7 @@ jobs:
     - name: Build Number Generator
       # uses: einaregilsson/build-number@46decf22c413b48c8923e98b2b5836f8aaf7781e
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         prefix: gnome
       uses: einaregilsson/build-number@v3
     - name: Upload a Build Artifact
