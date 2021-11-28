@@ -31,7 +31,7 @@ namespace Gnome
             SetupGnomeTrayIcon();
             SetupGnomeTimer();
 
-            _ = Task.Run(GetGnomedAsync); // Get gnomed on
+            _ = GetGnomedAsync().ConfigureAwait(false); // Get gnomed on
         }
 
         private async Task GetGnomedAsync()
