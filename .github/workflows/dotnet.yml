@@ -37,7 +37,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore -c Release -o build
     - name: Publish
-      run: dotnet publish -p:PublishProfile=FolderProfile
+      run: dotnet publish -p:PublishProfile=ClickOnceProfile
     - name: GitHub Publish - Archive
       run: powershell Compress-Archive -Path Gnome\publish\* -DestinationPath gnome.zip
     - name: GitHub Publish - Release
