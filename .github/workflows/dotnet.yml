@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -24,14 +24,9 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish -p:PublishProfile=FolderProfile
-    - name: Build Number Generator
-      # uses: einaregilsson/build-number@46decf22c413b48c8923e98b2b5836f8aaf7781e
-      with:
-        prefix: gnome
-      uses: einaregilsson/build-number@v3
+      run: dotnet publish -p:PublishProfile=FolderProfile -o D:\a\Gnome\Gnome\Gnome\publish
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.4
       with:
-        name: ${{ steps.buildnumber.outputs.build_number }}
-        path: publish
+        name: ${{ github.run_id }}
+        path: D:\a\Gnome\Gnome\Gnome\publish
