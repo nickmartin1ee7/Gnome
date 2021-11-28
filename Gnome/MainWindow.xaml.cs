@@ -4,8 +4,11 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using System.Windows.Forms;
+using Timer = System.Timers.Timer;
 
 namespace Gnome
 {
@@ -22,11 +25,13 @@ namespace Gnome
         {
             InitializeComponent();
 
+            mainWindow.Visibility = Visibility.Hidden;
+
             SetupSoundPlayer();
             SetupGnomeTrayIcon();
             SetupGnomeTimer();
 
-            GetGnomed(); // Get gnomed on
+            GetGnomedAsync(); // Get gnomed on
         }
 
         private Stream GetResourceStreamByName(string name)
@@ -48,7 +53,7 @@ namespace Gnome
 
         private void TrayIcon_LeftMouseDown(object sender, RoutedEventArgs e)
         {
-            GetGnomed();
+            GetGnomedAsync();
         }
 
         private void TrayIcon_RightMouseDown(object sender, RoutedEventArgs e)
@@ -67,18 +72,29 @@ namespace Gnome
         private void SetupGnomeTimer()
         {
             _gnomeTimer = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
-            _gnomeTimer.Elapsed += RandomGnome;
+            _gnomeTimer.Elapsed += RandomGnomeAsync;
             _gnomeTimer.Start();
         }
 
-        private void RandomGnome(object? sender, ElapsedEventArgs e)
+        private async void RandomGnomeAsync(object? sender, ElapsedEventArgs e)
         {
             if (_rng.NextDouble() > GNOMED_CHANCE)
                 return;
 
-            GetGnomed();
+            await GetGnomedAsync();
         }
 
-        private void GetGnomed() => _soundPlayer.Play();
+        private async Task GetGnomedAsync()
+        {
+            var mousePos = Control.MousePosition;
+            mainWindow.Left = mousePos.X - (mainWindow.Width / 2);
+            mainWindow.Top = mousePos.Y - (mainWindow.Height / 2);
+            mainWindow.Visibility = Visibility.Visible;
+
+            _soundPlayer.Play();
+            await Task.Delay(300);
+
+            mainWindow.Visibility = Visibility.Hidden;
+        }
     }
 }

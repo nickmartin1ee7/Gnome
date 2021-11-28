@@ -4,5 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="0" Width="0" Visibility="Hidden">    
+        Title="Gnome" Height="200" Width="100"
+        Name="mainWindow"
+        WindowStartupLocation="Manual"
+        Topmost="True"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Icon="/gnome.ico"
+        AllowsTransparency="True"
+        WindowStyle="None">
+    <Window.Background>
+        <SolidColorBrush Opacity="0"></SolidColorBrush>
+    </Window.Background>
+    <Grid>
+        <Image Source="/gnome.ico" Stretch="Fill" StretchDirection="Both"/>
+    </Grid>
 </Window>
