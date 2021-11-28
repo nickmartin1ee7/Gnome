@@ -9,6 +9,7 @@
     <Description>Get Gnomed on!</Description>
     <PackageIcon>gnome.png</PackageIcon>
     <ApplicationIcon>gnome.ico</ApplicationIcon>
+    <Authors>NickMartin1ee7</Authors>
   </PropertyGroup>
 
   <ItemGroup>
