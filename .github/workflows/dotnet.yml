@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -24,9 +22,36 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish -p:PublishProfile=FolderProfile -o D:\a\Gnome\Gnome\Gnome\publish
+      run: dotnet publish -p:PublishProfile=FolderProfile -o 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.4
       with:
-        name: ${{ github.run_id }}
+        name: gnome-${{ github.run_id }}
         path: D:\a\Gnome\Gnome\Gnome\publish
+        
+  publish:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: [ build ]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore -c Release -o build
+    - name: Publish
+      run: dotnet publish --no-restore -p:PublishProfile=FolderProfile -o release
+    - name: GitHub Publish - Archive
+      run: powershell Compress-Archive -Path release\* -DestinationPath gnome.zip
+    - name: GitHub Publish - Release
+      uses: softprops/action-gh-release@v1      
+      with:
+        tag_name: ${{ github.workflow }}
+        name: Release ${{ github.run_id}}
+        draft: false
+        prerelease: false
+        files: gnome.zip
