@@ -28,5 +28,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.4
       with:
-        name: ${{ GITHUB_RUN_ID }}
+        name: ${{ github.run_id }}
         path: D:\a\Gnome\Gnome\Gnome\publish
