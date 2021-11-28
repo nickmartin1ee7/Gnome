@@ -31,7 +31,20 @@ namespace Gnome
             SetupGnomeTrayIcon();
             SetupGnomeTimer();
 
-            GetGnomedAsync(); // Get gnomed on
+            _ = Task.Run(GetGnomedAsync); // Get gnomed on
+        }
+
+        private async Task GetGnomedAsync()
+        {
+            var mousePos = Control.MousePosition;
+            mainWindow.Left = mousePos.X - (mainWindow.Width / 2);
+            mainWindow.Top = mousePos.Y - (mainWindow.Height / 2);
+            mainWindow.Visibility = Visibility.Visible;
+
+            _soundPlayer.Play();
+            await Task.Delay(300);
+
+            mainWindow.Visibility = Visibility.Hidden;
         }
 
         private Stream GetResourceStreamByName(string name)
@@ -51,9 +64,21 @@ namespace Gnome
             _tb.TrayRightMouseDown += TrayIcon_RightMouseDown;
         }
 
-        private void TrayIcon_LeftMouseDown(object sender, RoutedEventArgs e)
+        private void SetupSoundPlayer()
         {
-            GetGnomedAsync();
+            _soundPlayer = new(GetResourceStreamByName("gnome.wav"));
+        }
+
+        private void SetupGnomeTimer()
+        {
+            _gnomeTimer = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
+            _gnomeTimer.Elapsed += Timer_RandomGnomeAsync;
+            _gnomeTimer.Start();
+        }
+
+        private async void TrayIcon_LeftMouseDown(object sender, RoutedEventArgs e)
+        {
+            await GetGnomedAsync();
         }
 
         private void TrayIcon_RightMouseDown(object sender, RoutedEventArgs e)
@@ -64,37 +89,12 @@ namespace Gnome
             Environment.Exit(0);
         }
 
-        private void SetupSoundPlayer()
-        {
-            _soundPlayer = new(GetResourceStreamByName("gnome.wav"));
-        }
-
-        private void SetupGnomeTimer()
-        {
-            _gnomeTimer = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
-            _gnomeTimer.Elapsed += RandomGnomeAsync;
-            _gnomeTimer.Start();
-        }
-
-        private async void RandomGnomeAsync(object? sender, ElapsedEventArgs e)
+        private async void Timer_RandomGnomeAsync(object? sender, ElapsedEventArgs e)
         {
             if (_rng.NextDouble() > GNOMED_CHANCE)
                 return;
 
             await GetGnomedAsync();
-        }
-
-        private async Task GetGnomedAsync()
-        {
-            var mousePos = Control.MousePosition;
-            mainWindow.Left = mousePos.X - (mainWindow.Width / 2);
-            mainWindow.Top = mousePos.Y - (mainWindow.Height / 2);
-            mainWindow.Visibility = Visibility.Visible;
-
-            _soundPlayer.Play();
-            await Task.Delay(300);
-
-            mainWindow.Visibility = Visibility.Hidden;
         }
     }
 }
