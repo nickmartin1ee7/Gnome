@@ -21,13 +21,6 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Publish
-      run: dotnet publish -p:PublishProfile=FolderProfile -o 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.4
-      with:
-        name: gnome-${{ github.run_id }}
-        path: D:\a\Gnome\Gnome\Gnome\publish
         
   publish:
     if: ${{ github.ref == 'refs/heads/main' }}
