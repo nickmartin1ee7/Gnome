@@ -44,7 +44,7 @@ jobs:
       uses: softprops/action-gh-release@v1      
       with:
         tag_name: ${{ github.workflow }}
-        name: Release ${{ github.run_id}}
+        name: Release v${{ github.run_number}}
         draft: false
         prerelease: false
         files: gnome.zip
