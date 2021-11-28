@@ -39,7 +39,7 @@ jobs:
     - name: Publish
       run: dotnet publish -p:PublishProfile=FolderProfile
     - name: GitHub Publish - Archive
-      run: powershell Compress-Archive -Path publish\* -DestinationPath gnome.zip
+      run: powershell Compress-Archive -Path Gnome\publish\* -DestinationPath gnome.zip
     - name: GitHub Publish - Release
       uses: softprops/action-gh-release@v1      
       with:
