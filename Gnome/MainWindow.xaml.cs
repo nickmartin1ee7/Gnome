@@ -14,7 +14,7 @@ namespace Gnome
 {
     public partial class MainWindow : Window
     {
-        private const double GNOMED_CHANCE = 0.1;
+        private const double GNOMED_CHANCE = 1;
 
         private TaskbarIcon _tb;
         private SoundPlayer _soundPlayer;
@@ -94,7 +94,7 @@ namespace Gnome
             if (_rng.NextDouble() > GNOMED_CHANCE)
                 return;
 
-            await GetGnomedAsync();
+            await Dispatcher.InvokeAsync(GetGnomedAsync);
         }
     }
 }
