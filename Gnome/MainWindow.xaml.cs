@@ -14,7 +14,7 @@ namespace Gnome
 {
     public partial class MainWindow : Window
     {
-        private const double GNOMED_CHANCE = 1;
+        private const double GNOMED_CHANCE = .1;
 
         private TaskbarIcon _tb;
         private SoundPlayer _soundPlayer;
